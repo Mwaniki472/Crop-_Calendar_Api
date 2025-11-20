@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
-const User = require('../models/user');
+const User = require('../models/User');
 
 // POST /api/activity - add a planned activity with optional coords
 router.post('/', auth, async (req, res) => {
