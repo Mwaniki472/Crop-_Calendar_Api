@@ -31,3 +31,7 @@ const Login = () => {
 };
 
 export default Login;
+
+async function login(email, password) {
+  return API.post('/api/auth/login', { email, password });
+}

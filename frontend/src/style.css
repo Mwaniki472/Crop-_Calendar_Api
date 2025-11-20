@@ -1,6 +1,6 @@
 body {
   font-family: Arial, sans-serif;
-  background: #e0ffe0;
+  background: linear-gradient(180deg, #eafaf1 0%, #dff3e8 60%);
   margin: 0;
   padding: 0;
   min-height: 100vh;
@@ -8,11 +8,18 @@ body {
   overflow-x: hidden;
 }
 
-/* Remove animated crop-like background */
+/* Subtle shady overlay (static, header sits in front) */
 body::before {
-  content: none;
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(800px 300px at 15% 10%, rgba(0,0,0,0.06), transparent 25%),
+              radial-gradient(700px 260px at 85% 90%, rgba(0,0,0,0.04), transparent 25%);
+  z-index: 0;
 }
 
+/* Layout container */
 .container {
   max-width: 900px;
   margin: 0 auto;
@@ -24,25 +31,26 @@ body::before {
   justify-content: flex-start;
 }
 
+/* Buttons, inputs, headings */
 button {
-  background-color:darkgreen;
+  background-color: darkgreen;
   color: white;
   padding: 8px 16px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   margin-top: 8px;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.12s ease;
 }
 
 button:hover {
-  background-color: #16a34a;
+  background-color: #0f7a13;
 }
 
 input {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
   width: 100%;
   box-sizing: border-box;
   margin-top: 8px;
@@ -50,49 +58,101 @@ input {
 
 h1, h2 {
   text-align: center;
+  margin: 0;
 }
 
-/* Header */
+/* Header (in front of shady overlay) */
 .app-header {
-  background-color: #16a34a;
-  color: white;
-  padding: 32px 16px 16px 16px;
-  text-align: center;
-  font-size: 32px;
-  font-weight: bold;
-  border-bottom: 2px solid #22c55e;
   position: relative;
-  z-index: 1;
+  z-index: 2; /* ensure header sits above the shady overlay */
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 28px 20px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: rgba(255,255,255,0.95);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.07);
 }
 
-/* Header content grid: centers button and description */
+/* Brand: bold with crop emoji (emoji included via JSX) */
+.brand {
+  margin: 6px 0 4px 0; /* smaller gap so button sits just under the title */
+  font-size: 32px;
+  color: #064a11;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Header content: ensure items are centered and button sits just under the brand */
 .header-content {
   display: grid;
-  grid-template-rows: auto auto;
-  justify-items: center;
-  align-items: center;
-  gap: 12px;
+  grid-template-columns: 1fr;
+  gap: 8px;               /* tighten spacing */
   width: 100%;
-  margin-top: 16px;
+  max-width: 720px;
+  justify-items: center;  /* center button and description */
+  align-items: start;
+  margin-top: 8px;        /* light spacing below the brand */
 }
 
-/* "Get Started" button just above description */
+/* Get Started button: light, centered directly under brand */
 .get-started-btn {
-  font-size: 18px;
-  padding: 10px 28px;
-  margin: 0;
+  background-color: #f6fff6; /* light button */
+  color: #0b5a10;
+  border: 2px solid #cfeed1;
+  padding: 8px 24px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 6px 12px rgba(10,80,20,0.06); /* subtle lift */
+  margin: 0;                     /* controlled by grid gap */
+  justify-self: center;          /* explicit centering */
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
-/* Description in grid, centered */
+.get-started-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(10,80,20,0.09);
+}
+
+/* Description inside the grid, centered with the button */
 .header-description {
-  font-size: 18px;
-  color: #e0ffe0;
-  max-width: 600px;
   text-align: center;
+  color: #26472a;
+  font-size: 16px;
+  line-height: 1.45;
+  max-width: 640px;
   margin: 0;
+  padding: 4px 8px;
+  justify-self: center; /* ensure it aligns with the button */
+}
+
+/* About subsection inside header, part of grid */
+.about {
+  text-align: left;
+  color: #234824;
+  background: rgba(255,255,255,0.8);
+  padding: 14px 16px;
+  border-radius: 8px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.03);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.about h2 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  color: #0b5a10;
+}
+
+.sdg {
+  margin-top: 8px;
+  font-weight: 600;
+  color: #155724;
 }
 
 /* Footer always at bottom */
@@ -110,16 +170,11 @@ h1, h2 {
   z-index: 2;
 }
 
-/* Responsive adjustments */
+/* Responsive tweaks */
 @media (max-width: 600px) {
-  .container {
-    padding: 8px;
-  }
-  .app-header {
-    font-size: 22px;
-    padding: 20px 8px 8px 8px;
-  }
-  .header-description {
-    font-size: 15px;
-  }
+  .brand { font-size: 22px; }
+  .get-started-btn { padding: 10px 20px; font-size: 15px; }
+  .header-description { font-size: 15px; }
+  .about h2 { font-size: 16px; text-align: center; }
+  .about { text-align: center; }
 }
