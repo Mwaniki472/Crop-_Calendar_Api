@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const auth = require('../middleware/auth');
-const User = require('../models/user');
+const User = require('../models/User');
 
 // GET /api/weather/today
 router.get('/today', auth, async (req, res) => {
